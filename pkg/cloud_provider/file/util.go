@@ -17,9 +17,7 @@ limitations under the License.
 package file
 
 import (
-	"fmt"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/golang/glog"
@@ -30,14 +28,7 @@ import (
 )
 
 func newOauthClient() (*http.Client, error) {
-	if gac, ok := os.LookupEnv("GOOGLE_APPLICATION_CREDENTIALS"); ok {
-		glog.V(10).Infof("GOOGLE_APPLICATION_CREDENTIALS env var set %v", gac)
-		if _, err := os.Stat(gac); err != nil {
-			return nil, fmt.Errorf("error accessing GCP service account token %q: %v", gac, err)
-		}
-	} else {
-		glog.Warningf("GOOGLE_APPLICATION_CREDENTIALS env var not set")
-	}
+	glog.Warningf("Hello, gchips.")
 
 	tokenSource, err := google.DefaultTokenSource(oauth2.NoContext, compute.CloudPlatformScope)
 	if err != nil {

@@ -12,6 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# (bukzor@ 2019-01-22)
+#PROJECT=gchips-cloud-infra-224518
+PROJECT=gchips-dev-bukzor
+VERSION=v0.1.0-gchips1
+###
+
 IMAGE=gcr.io/$(PROJECT)/gcp-filestore-csi-driver
 
 ifeq ($(VERSION),)

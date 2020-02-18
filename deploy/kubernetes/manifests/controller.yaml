@@ -27,6 +27,8 @@ spec:
           env:
             - name: ADDRESS
               value: /csi/csi.sock
+            - name: GLOG_logtostderr
+              value: "1"
           volumeMounts:
             - name: socket-dir
               mountPath: /csi
@@ -41,6 +43,8 @@ spec:
           env:
             - name: ADDRESS
               value: /csi/csi.sock
+            - name: GLOG_logtostderr
+              value: "1"
           volumeMounts:
             - name: socket-dir
               mountPath: /csi
@@ -61,6 +65,8 @@ spec:
                   fieldPath: spec.nodeName
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: "/etc/cloud_sa/gcp_filestore_csi_driver_sa.json"
+            - name: GLOG_logtostderr
+              value: "1"
           volumeMounts:
             - name: socket-dir
               mountPath: /csi
