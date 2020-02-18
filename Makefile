@@ -33,8 +33,23 @@ local:
 	mkdir -p bin
 	go build -ldflags "-X main.vendorVersion=${VERSION}" -o bin/gcfs-csi-driver ./cmd/
 
+windows: windows-local
+	docker build -f test/experimental/Dockerfile --build-arg TAG=$(VERSION) -t $(IMAGE)-windows:$(VERSION) .
+	
+windows-local:
+	mkdir -p bin
+	GOOS=windows GOARCH=amd64 go build -ldflags "-X main.vendorVersion=${VERSION}" -o bin/gcfs-csi-driver.exe ./cmd/
+
 push:
 	docker push $(IMAGE):$(VERSION)
 
 skaffold-dev:
 	skaffold dev -f deploy/skaffold/skaffold.yaml
+
+csi-client:
+	mkdir -p bin
+	go build -ldflags "-X main.vendorVersion=${VERSION}" -o bin/csi-client ./hack/csi_client/cmd/
+
+csi-client-windows:
+	mkdir -p bin
+	GOOS=windows GOARCH=amd64 go build -ldflags "-X main.vendorVersion=${VERSION}" -o bin/csi-client.exe ./hack/csi_client/cmd/

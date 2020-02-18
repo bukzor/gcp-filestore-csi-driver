@@ -20,10 +20,10 @@ spec:
       containers:
         - name: csi-external-attacher
           imagePullPolicy: Always
-          image: quay.io/k8scsi/csi-attacher:v0.3.0
+          image: gcr.io/gke-release/csi-attacher:v0.4.1-gke.0
           args:
             - "--v=4"
-            - "--csi-address=$(ADDRESS)"
+            - "--csi-address=/csi/csi.sock"
           env:
             - name: ADDRESS
               value: /csi/csi.sock
@@ -34,12 +34,12 @@ spec:
               mountPath: /csi
         - name: csi-external-provisioner
           imagePullPolicy: Always
-          image: quay.io/k8scsi/csi-provisioner:v0.3.0
+          image: gcr.io/gke-release/csi-provisioner:v0.4.1-gke.0
           args:
             - "--v=4"
             # Remove when https://github.com/kubernetes-csi/external-provisioner/issues/108 is fixed
-            - "--provisioner=com.google.csi.filestore"
-            - "--csi-address=$(ADDRESS)"
+            - "--provisioner=filestore.csi.storage.gke.io"
+            - "--csi-address=/csi/csi.sock"
           env:
             - name: ADDRESS
               value: /csi/csi.sock
@@ -50,15 +50,13 @@ spec:
               mountPath: /csi
         - name: gcp-filestore-driver
           imagePullPolicy: Always
-          image: gcr.io/google-containers/volume-csi/gcp-filestore-csi-driver:v0.1.0
+          image: gcr.io/gke-release/gcp-filestore-csi-driver:v0.2.0-gke.0
           args:
             - "--v=4"
-            - "--endpoint=$(CSI_ENDPOINT)"
+            - "--endpoint=unix:/csi/csi.sock"
             - "--nodeid=$(KUBE_NODE_NAME)"
             - "--controller=true"
           env:
-            - name: CSI_ENDPOINT
-              value: unix:/csi/csi.sock
             - name: KUBE_NODE_NAME
               valueFrom:
                 fieldRef:
